@@ -5,6 +5,7 @@
 
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Components/InputComponent.h"
 
 // Sets default values
 ATank::ATank()
@@ -24,4 +25,18 @@ void ATank::BeginPlay()
 {
 	Super::BeginPlay();
 
+}
+
+void ATank::Move(float Value)
+{
+	// Move the tank forward and backward
+	UE_LOG(LogTemp, Warning, TEXT("Move: %f"), Value);
+}
+
+// Called to bind functionality to input
+void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ATank::Move);
 }
