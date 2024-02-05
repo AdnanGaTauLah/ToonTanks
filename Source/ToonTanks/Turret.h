@@ -26,14 +26,15 @@ protected:
 	virtual void BeginPlay() override;
 
 protected:
-	UPROPERTY(EditAnywhere, Category = "Movement", BlueprintReadWrite)
-	float MoveSpeed;
 
-	UPROPERTY(EditAnywhere, Category = "Movement", BlueprintReadWrite)
-	float TurnRate;
 
 	UPROPERTY(EditAnywhere, Category = "Movement", BlueprintReadWrite)
 	float FireRange;
 
 	class ATank* Tank;
+
+	FTimerHandle FireRateTimerHandle;
+	float FireRate = 2.f;
+	void CheckFireCondition();
+	bool bInFireRange();
 };
