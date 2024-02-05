@@ -4,22 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "BasePawn.h"
-#include "Tank.generated.h"
+#include "Turret.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class TOONTANKS_API ATank : public ABasePawn
+class TOONTANKS_API ATurret : public ABasePawn
 {
 	GENERATED_BODY()
-
+	
 public:
 	// Sets default values for this pawn's properties
-	ATank();
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	ATurret();
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -29,21 +26,14 @@ protected:
 	virtual void BeginPlay() override;
 
 protected:
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	class USpringArmComponent* SpringArm;
-
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	class UCameraComponent* Camera;
-
 	UPROPERTY(EditAnywhere, Category = "Movement", BlueprintReadWrite)
 	float MoveSpeed;
 
 	UPROPERTY(EditAnywhere, Category = "Movement", BlueprintReadWrite)
 	float TurnRate;
 
-	APlayerController* PlayerControllerRef;
+	UPROPERTY(EditAnywhere, Category = "Movement", BlueprintReadWrite)
+	float FireRange;
 
-	void Move(float Value);
-	void Turn(float Value);
-	virtual void Fire() override;
+	class ATank* Tank;
 };

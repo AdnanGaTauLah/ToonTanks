@@ -32,7 +32,10 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAcces = "true"))
 	USceneComponent* ProjectileSpawnPoint;
 
-	
+	void RotateTurret(FVector LookAtTarget);
+	virtual void Fire();
+
+	float RotateSpeed = 5.f;
 
 public:	
 	// Called every frame

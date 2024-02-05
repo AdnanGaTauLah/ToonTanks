@@ -7,6 +7,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/InputComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "DrawDebugHelpers.h"
 
 // Sets default values
 ATank::ATank()
@@ -25,7 +26,7 @@ ATank::ATank()
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
-
+	PlayerControllerRef = Cast<APlayerController>(GetController());
 }
 
 void ATank::Move(float Value)
@@ -45,6 +46,7 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ATank::Move);
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &ATank::Turn);
+	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &ATank::Fire);
 }
 
 void ATank::Turn(float Value)
@@ -54,4 +56,25 @@ void ATank::Turn(float Value)
 	float Deltatime = UGameplayStatics::GetRealTimeSeconds(this);
 	DeltaRotation.Yaw = Value * TurnRate * Deltatime;
 	AddActorLocalRotation(DeltaRotation, true);
+}
+
+// Called every frame
+void ATank::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (PlayerControllerRef)
+	{
+		FHitResult HitResult;
+		PlayerControllerRef->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, HitResult);
+		DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 20, 12, FColor::Green, false, -1.0f);
+		RotateTurret(HitResult.ImpactPoint);
+	}
+}
+
+void ATank::Fire()
+{
+	Super::Fire();
+
+	DrawDebugSphere(GetWorld(), ProjectileSpawnPoint->GetComponentLocation(), 20, 12, FColor::Red, true, 4.0f);
 }
