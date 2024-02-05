@@ -12,6 +12,12 @@ ABasePawn::ABasePawn()
 	
 	CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule Collider"));
 	RootComponent = CapsuleComponent;
+
+	BaseMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Base Mesh"));
+	BaseMesh->SetupAttachment(CapsuleComponent);
+
+	TurretMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Turret Mesh"));
+	TurretMesh->SetupAttachment(BaseMesh);	
 }
 
 // Called when the game starts or when spawned
