@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/InputComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ATank::ATank()
@@ -31,8 +32,9 @@ void ATank::Move(float Value)
 {
 	// Move the tank forward and backward
 	FVector DeltaLocation = FVector::ZeroVector;
-	DeltaLocation.X = Value;
-	AddActorLocalOffset(DeltaLocation);
+	float Deltatime = UGameplayStatics::GetRealTimeSeconds(this);
+	DeltaLocation.X = Value * MoveSpeed * Deltatime;
+	AddActorLocalOffset(DeltaLocation, true);
 
 }
 
@@ -42,4 +44,14 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ATank::Move);
+	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &ATank::Turn);
+}
+
+void ATank::Turn(float Value)
+{
+	// Rotate the tank
+	FRotator DeltaRotation = FRotator::ZeroRotator;
+	float Deltatime = UGameplayStatics::GetRealTimeSeconds(this);
+	DeltaRotation.Yaw = Value * TurnRate * Deltatime;
+	AddActorLocalRotation(DeltaRotation, true);
 }

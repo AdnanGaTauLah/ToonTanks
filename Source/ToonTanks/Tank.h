@@ -32,5 +32,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UCameraComponent* Camera;
 
+	UPROPERTY(EditAnywhere, Category = "Movement", BlueprintReadWrite)
+	float MoveSpeed;
+
+	UPROPERTY(EditAnywhere, Category = "Movement", BlueprintReadWrite)
+	float TurnRate;
+
 	void Move(float Value);
+	void Turn(float Value);
 };
