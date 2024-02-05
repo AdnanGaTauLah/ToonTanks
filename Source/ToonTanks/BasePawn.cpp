@@ -4,6 +4,7 @@
 #include "BasePawn.h"
 #include "Components/CapsuleComponent.h"
 
+
 // Sets default values
 ABasePawn::ABasePawn()
 {
@@ -21,6 +22,7 @@ ABasePawn::ABasePawn()
 
 	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>(TEXT("Projectile Spawn Point"));
 	ProjectileSpawnPoint->SetupAttachment(TurretMesh);
+
 }
 
 // Called when the game starts or when spawned
