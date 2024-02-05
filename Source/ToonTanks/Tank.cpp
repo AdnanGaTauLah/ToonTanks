@@ -30,7 +30,10 @@ void ATank::BeginPlay()
 void ATank::Move(float Value)
 {
 	// Move the tank forward and backward
-	UE_LOG(LogTemp, Warning, TEXT("Move: %f"), Value);
+	FVector DeltaLocation = FVector::ZeroVector;
+	DeltaLocation.X = Value;
+	AddActorLocalOffset(DeltaLocation);
+
 }
 
 // Called to bind functionality to input
