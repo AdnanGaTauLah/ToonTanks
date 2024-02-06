@@ -56,7 +56,7 @@ void ATank::Move(float Value)
 {
 	// Move the tank forward and backward
 	FVector DeltaLocation = FVector::ZeroVector;
-	DeltaLocation.X = Value * MoveSpeed * UGameplayStatics::GetRealTimeSeconds(this);
+	DeltaLocation.X = Value * MoveSpeed * UGameplayStatics::GetWorldDeltaSeconds(this);
 	AddActorLocalOffset(DeltaLocation, true);
 
 }
@@ -67,7 +67,7 @@ void ATank::Turn(float Value)
 {
 	// Rotate the tank
 	FRotator DeltaRotation = FRotator::ZeroRotator;
-	DeltaRotation.Yaw = Value * TurnRate * UGameplayStatics::GetRealTimeSeconds(this);
+	DeltaRotation.Yaw = Value * TurnRate * UGameplayStatics::GetWorldDeltaSeconds(this);
 	AddActorLocalRotation(DeltaRotation, true);
 	GetController();
 }
