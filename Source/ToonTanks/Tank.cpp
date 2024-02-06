@@ -22,23 +22,6 @@ ATank::ATank()
 	Camera->SetupAttachment(SpringArm);
 }	
 
-// Called when the game starts or when spawned
-void ATank::BeginPlay()
-{
-	Super::BeginPlay();
-	PlayerControllerRef = Cast<APlayerController>(GetController());
-}
-
-void ATank::Move(float Value)
-{
-	// Move the tank forward and backward
-	FVector DeltaLocation = FVector::ZeroVector;
-	float Deltatime = UGameplayStatics::GetRealTimeSeconds(this);
-	DeltaLocation.X = Value * MoveSpeed * Deltatime;
-	AddActorLocalOffset(DeltaLocation, true);
-
-}
-
 // Called to bind functionality to input
 void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -47,15 +30,6 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ATank::Move);
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &ATank::Turn);
 	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &ATank::Fire);
-}
-
-void ATank::Turn(float Value)
-{
-	// Rotate the tank
-	FRotator DeltaRotation = FRotator::ZeroRotator;
-	float Deltatime = UGameplayStatics::GetRealTimeSeconds(this);
-	DeltaRotation.Yaw = Value * TurnRate * Deltatime;
-	AddActorLocalRotation(DeltaRotation, true);
 }
 
 // Called every frame
@@ -67,14 +41,33 @@ void ATank::Tick(float DeltaTime)
 	{
 		FHitResult HitResult;
 		PlayerControllerRef->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, HitResult);
-		DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 20, 12, FColor::Green, false, -1.0f);
 		RotateTurret(HitResult.ImpactPoint);
 	}
 }
 
-void ATank::Fire()
+// Called when the game starts or when spawned
+void ATank::BeginPlay()
 {
-	Super::Fire();
+	Super::BeginPlay();
+	PlayerControllerRef = Cast<APlayerController>(GetController());
+}
 
-	DrawDebugSphere(GetWorld(), ProjectileSpawnPoint->GetComponentLocation(), 20, 12, FColor::Red, true, 4.0f);
+void ATank::Move(float Value)
+{
+	// Move the tank forward and backward
+	FVector DeltaLocation = FVector::ZeroVector;
+	DeltaLocation.X = Value * MoveSpeed * UGameplayStatics::GetRealTimeSeconds(this);
+	AddActorLocalOffset(DeltaLocation, true);
+
+}
+
+
+
+void ATank::Turn(float Value)
+{
+	// Rotate the tank
+	FRotator DeltaRotation = FRotator::ZeroRotator;
+	DeltaRotation.Yaw = Value * TurnRate * UGameplayStatics::GetRealTimeSeconds(this);
+	AddActorLocalRotation(DeltaRotation, true);
+	GetController();
 }

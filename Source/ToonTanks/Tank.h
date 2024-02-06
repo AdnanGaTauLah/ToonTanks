@@ -45,5 +45,4 @@ protected:
 
 	void Move(float Value);
 	void Turn(float Value);
-	virtual void Fire() override;
 };

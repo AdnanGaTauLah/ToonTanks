@@ -3,7 +3,9 @@
 
 #include "BasePawn.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Projectile.h"
 
 
 
@@ -42,15 +44,8 @@ void ABasePawn::Tick(float DeltaTime)
 
 void ABasePawn::RotateTurret(FVector LookAtTarget)
 {
-	// Copilot: This is the function that rotates the turret to look at the target
-	/*
-	FVector LookAtTargetClean = FVector(LookAtTarget.X, LookAtTarget.Y, TurretMesh->GetComponentLocation().Z);
-	FVector StartLocation = TurretMesh->GetComponentLocation();
-	FRotator TurretRotation = FVector(LookAtTargetClean - StartLocation).Rotation();
-	TurretMesh->SetWorldRotation(TurretRotation);
-	*/
-
 	// Course: This is the function that rotates the turret to look at the target
+	float RotateSpeed = 5.f;
 	FVector ToTarget = LookAtTarget - TurretMesh->GetComponentLocation();
 	FRotator LookAtRotation = FRotator(0.f, ToTarget.Rotation().Yaw, 0.f);
 	TurretMesh->SetWorldRotation(
@@ -64,18 +59,9 @@ void ABasePawn::RotateTurret(FVector LookAtTarget)
 
 void ABasePawn::Fire()
 {
-	// Copilot: This is the function that fires the projectile
-	/*
-		if (ProjectileClass)
-			{
-				FVector SpawnLocation = ProjectileSpawnPoint->GetComponentLocation();
-				FRotator SpawnRotation = ProjectileSpawnPoint->GetComponentRotation();
-				AProjectileBase* TempProjectile = GetWorld()->SpawnActor<AProjectileBase>(ProjectileClass, SpawnLocation, SpawnRotation);
-				TempProjectile->SetOwner(this);
-			}
-	*/
-
 	// Course: This is the function that fires the projectile
-	DrawDebugSphere(GetWorld(), ProjectileSpawnPoint->GetComponentLocation(), 20, 12, FColor::Red, true, 4.0f);
+	FVector ProjectileSpawnLocation = ProjectileSpawnPoint->GetComponentLocation();
+	FRotator ProjectileSpawnRotation = ProjectileSpawnPoint->GetComponentRotation();
 
+	auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, ProjectileSpawnLocation, ProjectileSpawnRotation);
 }
