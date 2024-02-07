@@ -32,6 +32,13 @@ void ATurret::Tick(float DeltaTime)
 	}
 }
 
+void ATurret::HandleDestruction()
+{
+	// Copilot: This is the function that handles the destruction of the turret
+	Super::HandleDestruction();
+	Destroy();
+}
+
 void ATurret::CheckFireCondition()
 {
 	// Course: This is the function that checks if the turret can fire
