@@ -23,6 +23,7 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float Health = 100.0f;
 	float curretHealth = 0.0f;
+	class AToonTanksGameMode* ToonTanksGameMode;
 
 	UFUNCTION()
 	void DamageTaken(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* Instigator, AActor* DamageCauser);

@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Tank.h"
 #include "Turret.h"
+#include "TankController.h"
 
 void AToonTanksGameMode::ActorDied(AActor* DeadActor)
 {
@@ -12,15 +13,20 @@ void AToonTanksGameMode::ActorDied(AActor* DeadActor)
 	if (DeadActor == PlayerTank)
 	{
 		PlayerTank->HandleDestruction();
-		if (PlayerTank->GetPlayerController())
+		if (TankController)
 		{
-			PlayerTank->DisableInput(PlayerTank->GetPlayerController());
-			PlayerTank->GetPlayerController()->bShowMouseCursor = false;
+			TankController->SetPlayerEnabledState(false);
 		}
+		GameOver(false);
 	}
 	else if (ATurret* DestroyedTower = Cast<ATurret>(DeadActor))
 	{
 		DestroyedTower->HandleDestruction();
+		TargetTurrets--;
+		if (TargetTurrets == 0)
+		{
+			GameOver(true);
+		}
 	}
 }
 
@@ -28,5 +34,32 @@ void AToonTanksGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
+	HandleGameStart();
+}
+
+void AToonTanksGameMode::HandleGameStart()
+{
+	TargetTurrets = GetTargetTurretCount();
+
 	PlayerTank = Cast<ATank>(UGameplayStatics::GetPlayerPawn(this, 0));
+	TankController = Cast<ATankController>(UGameplayStatics::GetPlayerController(this, 0));
+	
+	GameStart();
+
+	if (TankController)
+	{
+		TankController->SetPlayerEnabledState(false);
+
+		FTimerHandle PlayerEnableHandle;
+		FTimerDelegate PlayerEnableDelegate = FTimerDelegate::CreateUObject(TankController, &ATankController::SetPlayerEnabledState, true);
+		GetWorldTimerManager().SetTimer(PlayerEnableHandle, PlayerEnableDelegate, GameStartDelay, false);
+	}
+
+}
+
+int32 AToonTanksGameMode::GetTargetTurretCount()
+{
+	TArray<AActor*> TurretActors;
+	UGameplayStatics::GetAllActorsOfClass(this, ATurret::StaticClass(), TurretActors);
+	return TurretActors.Num();
 }
