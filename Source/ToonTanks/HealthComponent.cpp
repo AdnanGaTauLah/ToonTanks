@@ -42,8 +42,7 @@ void UHealthComponent::DamageTaken(AActor* DamagedActor, float Damage, const UDa
 	if (Damage <= 0) return;
 
 	curretHealth -= Damage;
-	UE_LOG(LogTemp, Display, TEXT("Health: %f"), curretHealth);
-
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Health: %f actor : %s"), curretHealth, *DamagedActor->GetActorNameOrLabel()));
 	if (curretHealth <= 0 && ToonTanksGameMode)
 	{
 			ToonTanksGameMode->ActorDied(DamagedActor);

@@ -15,13 +15,11 @@ class TOONTANKS_API ATurret : public ABasePawn
 	GENERATED_BODY()
 	
 public:
-	// Sets default values for this pawn's properties
-	ATurret();
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void HandleDestruction() override;
+	void HandleDestruction();
 
 protected:
 	// Called when the game starts or when spawned

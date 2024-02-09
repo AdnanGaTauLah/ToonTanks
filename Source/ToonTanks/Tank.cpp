@@ -53,6 +53,8 @@ void ATank::HandleDestruction()
 	SetActorHiddenInGame(true);
 	// Disable the tank
 	SetActorTickEnabled(false);
+	// Set the tank to be not alive
+	bAlive = false;
 }
 
 // Called when the game starts or when spawned

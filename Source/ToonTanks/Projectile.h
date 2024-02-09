@@ -29,7 +29,22 @@ protected:
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 	UPROPERTY(EditAnywhere)
-	float Damage = 50.0f;
+	float DamageCost = 50.0f;
+
+	UPROPERTY(EditAnywhere)
+	class UParticleSystem* HitParticle;
+
+	UPROPERTY(VisibleAnywhere)
+	class UParticleSystemComponent* TrailParticle;
+
+	UPROPERTY(EditAnywhere)
+	class USoundBase* LaunchSound;
+
+	UPROPERTY(EditAnywhere)
+	class USoundBase* HitSound;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UCameraShakeBase> HitCameraShakeClass;
 
 public:	
 	// Called every frame

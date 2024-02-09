@@ -14,8 +14,8 @@ class TOONTANKS_API ABasePawn : public APawn
 public:
 	// Sets default values for this pawn's properties
 	ABasePawn();
-
-	virtual void HandleDestruction();
+	
+	void HandleDestruction();
 
 protected:
 	// Called when the game starts or when spawned
@@ -37,6 +37,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Combat")
 	TSubclassOf<class AProjectile> ProjectileClass;
 
+	UPROPERTY(EditAnywhere)
+	class UParticleSystem* DeathParticle;
+
+	UPROPERTY(EditAnywhere)
+	class USoundBase* DeathSound;
+
 	void RotateTurret(FVector LookAtTarget);
 	void Fire();
 
@@ -45,6 +51,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UCameraShakeBase> DeathShake;
 	
 
 };

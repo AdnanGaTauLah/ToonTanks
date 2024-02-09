@@ -6,6 +6,11 @@
 #include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Projectile.h"
+#include "Particles/ParticleSystemComponent.h"
+#include "Particles/ParticleSystem.h"
+#include "Kismet/GameplayStatics.h"
+#include "Camera/CameraShakeBase.h"
+#include "GameFramework/PlayerController.h"
 
 
 
@@ -31,7 +36,19 @@ ABasePawn::ABasePawn()
 
 void ABasePawn::HandleDestruction()
 {
-	
+	// Course: This is the function that handles the destruction of the pawn
+	if (DeathParticle)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(this, DeathParticle, GetActorLocation(), GetActorRotation());
+	}
+	if (DeathSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation());
+	}
+	if(DeathShake)
+	{ 
+		GetWorld()->GetFirstPlayerController()->ClientPlayCameraShake(DeathShake);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -68,6 +85,6 @@ void ABasePawn::Fire()
 	FVector ProjectileSpawnLocation = ProjectileSpawnPoint->GetComponentLocation();
 	FRotator ProjectileSpawnRotation = ProjectileSpawnPoint->GetComponentRotation();
 
-	auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, ProjectileSpawnLocation, ProjectileSpawnRotation);
+	AProjectile* Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, ProjectileSpawnLocation, ProjectileSpawnRotation);
 	Projectile->SetOwner(this);
 }
